@@ -1,3 +1,5 @@
-#EDD
-Este repositório contém algumas das minhas resoluções de listas de aprendizado da disciplina de Estrutura de Dados.
-Estarei colocando aqui a partir da Lista 2.
+# Resoluções de Estruturas de Dados
+Este repositório contém minhas soluções para os exercícios da disciplina de Estruturas de Dados. 
+O objetivo é compartilhar meu aprendizado e auxiliar outros estudantes.
+
+*As soluções serão postadas a partir da segunda lista de exercícios*
