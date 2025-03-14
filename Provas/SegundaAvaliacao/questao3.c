@@ -27,8 +27,12 @@ void inicializar_pilha(PILHA** p);
 NO* criar_no(int dado);
 FILA* criar_fila();
 bool inserir_na_fila(FILA** f, int dado);
-bool inserir_na_pilha(PILHA** p, FILA* f);
-void processar_fila(FILA** f);
+bool empilhar(PILHA* p, FILA* f);
+FILA* processar_fila(FILA* f);
+void pop(PILHA** p);
+
+void exibir_pilha(PILHA* p);
+void exibir_fila(FILA* f);
 
 // programa principal
 int main()
@@ -38,13 +42,16 @@ int main()
     // inicializando a pilha:
     inicializar_pilha(&p);
 
-    //
-    FILA* f = criar_fila();
-    inserir_na_fila(&f, 35);
-
-    if (inserir_na_pilha(&p, f))
+    int i, j;
+    for (i=1; i<7; i++)
     {
-        printf("\nInserido com sucesso!\n");
+        FILA* f = criar_fila();
+
+        for (j=i; j<10; j++)
+        {
+            inserir_na_fila(&f, j*3);
+        }
+        empilhar(p, f);
     }
 
     return 0;
@@ -107,38 +114,82 @@ bool inserir_na_fila(FILA** f, int dado)
     return false;
 }
 
-bool inserir_na_pilha(PILHA** p, FILA* f)
+bool empilhar(PILHA* p, FILA* f)
 {
-    if ((*p)->contagem < M)
+    if (p->contagem < M)
     {
-        f->prox = (*p)->topo;
-        (*p)->topo = f;
-        (*p)->contagem++;
+        f->prox = p->topo;
+        p->topo = f;
+        p->contagem++;
         return true;
     }
     else 
     {
-        printf("\nPilha cheia!\n");
+        while(p->topo != NULL)
+        {
+            p->topo = processar_fila(p->topo);
+            pop(&p);
+        }
     }
 
     return false;
 }
 
-void processar_fila(FILA** f)
+FILA* processar_fila(FILA* f)
 {
-    if ((*f)->inicio != NULL)
+    NO* aux = f->inicio;
+    while(aux != NULL)
     {
-        NO* aux = (*f)->inicio;
-        while(aux != NULL)
+        NO* temp = aux;
+        aux = aux->prox;
+        free(temp);
+    }
+
+    return f;
+}
+
+void pop(PILHA** p)
+{
+    if ((*p)->topo != NULL)
+    {
+        FILA* temp = (*p)->topo;
+        
+        if (temp->inicio == NULL)
         {
-            NO* temp = aux;
-            aux = aux->prox;
+            (*p)->topo = (*p)->topo->prox;
+            (*p)->contagem--;
             free(temp);
         }
     }
 }
 
-void pop()
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void exibir_pilha(PILHA* p)
 {
-    
+    if (p->contagem == 0) return;
+
+    FILA* aux = p->topo;
+    int i;
+    printf("\nPILHA: \"\n");
+    for (i=0; i<p->contagem; i++)
+    {
+        exibir_fila(aux);
+        aux = aux->prox;
+    }
+    printf("\"\n");
+}
+
+void exibir_fila(FILA* f)
+{
+    if (f->inicio == NULL) return;
+
+    NO* aux = f->inicio;
+    printf("\nFILA: [ ");
+    while(aux != NULL)
+    {
+        printf("%d; ", aux->dado);
+        aux = aux->prox;
+    }
+    printf("]\n");
 }
