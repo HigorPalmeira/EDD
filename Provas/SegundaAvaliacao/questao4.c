@@ -34,26 +34,34 @@ bool algoritmo_relogio(FILA_CIRCULAR** f, int pagina)
     if ((*f)->inicio == NULL) return true;
 
     NO* aux = (*f)->inicio;
+    NO* anterior = aux;
     while(aux->prox != (*f)->inicio)
     {
-        NO* temp = aux;
         if (aux->bitR == '0')
         {
-            //remover_no(*f, aux);
+            NO* novoNo = (NO*) malloc(sizeof(NO));
+            novoNo->pagina = pagina;
+            novoNo->bitR = '1';
+            novoNo->prox = aux->prox;
+            anterior->prox = novoNo;
 
-            aux->pagina = pagina;
-            aux->bitR = '1';
+            if (aux == (*f)->inicio) (*f)->inicio = novoNo;
+            
+            if (aux == (*f)->final)
+            {
+                (*f)->final = novoNo;
+            }
+
+            free(aux);
+            return true;
         }
         else
         {
             aux->bitR = '0';
         }
 
+        anterior = aux;
         aux = aux->prox;
     }
-}
-
-void remover_no(FILA_CIRCULAR* f, NO* no)
-{
 
 }
